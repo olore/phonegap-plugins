@@ -22,7 +22,7 @@ A breakdown of options - <br>
 <b>ADJUSTING AppDelegate</b><br>
 After you've added LocalNotifications to your plugins you need to make a minor addition to AppDelegate.m
 
-<b>Cordova 1.7+</b>
+<b>Cordova 2.2+</b>
 <pre>
 	// ADD OUR NOTIFICATION CODE
 	- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification 
@@ -59,45 +59,6 @@ After you've added LocalNotifications to your plugins you need to make a minor a
 	    }                 
 	}
 </pre>
-<b>Phonegap</b>
-<pre>
-	// ADD OUR NOTIFICATION CODE
-	- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification 
-	{
-
-	    UIApplicationState state = [application applicationState];
-	    if (state == UIApplicationStateActive) {
-			// WAS RUNNING
-		    NSLog(@"I was currently active");
-
-		    NSString *notCB = [notification.userInfo objectForKey:@"foreground"];
-		    NSString *notID = [notification.userInfo objectForKey:@"notificationId"];
-
-		    NSString * jsCallBack = [NSString 
-		                             stringWithFormat:@"%@(%@)", notCB,notID];  
-
-
-		    [self.webView  stringByEvaluatingJavaScriptFromString:jsCallBack];
-
-		    application.applicationIconBadgeNumber = 0;
-	    }
-	    else {
-	        // WAS IN BG
-	        NSLog(@"I was in the background");
-
-	        NSString *notCB = [notification.userInfo objectForKey:@"background"];
-	        NSString *notID = [notification.userInfo objectForKey:@"notificationId"];
-
-		    NSString * jsCallBack = [NSString 
-		                             stringWithFormat:@"%@(%@)", notCB,notID]; 
-
-	        [self.webView stringByEvaluatingJavaScriptFromString:jsCallBack];         
-
-	        application.applicationIconBadgeNumber = 0;
-	    }                 
-	}
-</pre>
-Add this code to the end of your AppDelegate.m file in order for the callback functions to work properly!
 
 <b>EXAMPLE</b><br>
 <pre>
@@ -130,4 +91,3 @@ function background(id){
 - Added Notification ID's to callback.
 - Fixed spelling error for 'foreground'
 - Notice that you no longer have to call your background or foreground functions with the (). This is now added by the plugin on the objective-c side of things.
-
